@@ -143,21 +143,50 @@ class Flock {
    * part of flocking system
    */
   calculerCohesion(agents) {
+    // distance maximale pour considérer un voisin (rayon d'influence)
     let neighbordist = 30;
+
+    // vecteur qui va accumuler les positions des voisins
     let sum = new Vector(0, 0);
+
+    // compteur du nombre de voisins détectés
     let count = 0;
+
+    // On parcourt tous les agents
     for (let i = 0; i < agents.length; i++) {
+
+      // Calcul de la distance au carré entre l'agent courant et l'agent[i]
+      // (distSq = distance au carré, plus rapide que sqrt pour comparer des distances)
       let d = Vector.distSq(this.currentAgent.pos, agents[i].pos);
+
+      // Si la distance est > 0 (évite soi-même) ET < rayon d'influence²
       if ((d > 0) && (d < neighbordist * neighbordist)) {
+
+        // Ajouter la position du voisin au vecteur somme
+        // (on veut plus tard calculer la moyenne des positions)
         sum.add(agents[i].pos);
+
+        // Incrémenter le compteur de voisins
         count++;
       }
     }
+
+    // Si des voisins ont été trouvés
     if (count > 0) {
+      // Diviser la somme par le nombre de voisins
+      // -> on obtient la position moyenne = centre de masse des voisins
       sum.div(count);
+
+      // Calcul du vecteur direction vers ce centre de masse
+      // (on soustrait la position actuelle de l'agent)
       sum.sub(this.currentAgent.pos);
+
+      // Convertir ce vecteur en une force de direction adaptée (via _returnSteer)
       return this._returnSteer(sum);
     }
+
+    // Si aucun voisin trouvé → pas de force de cohésion
     return new Vector(0, 0);
-  }
+}
+
 }
