@@ -88,11 +88,11 @@ class Flock {
   }
 
   /**
-   * @method separate()
+   * @method calculerSeparation()
    * @param {Array} agents 
    * part of flocking system
    */
-  separate(agents) {
+  calculerSeparation(agents) {
     let desiredseperation = this.currentAgent.radius * 4;
     let sum = new Vector();
     let count = 0;
@@ -114,11 +114,11 @@ class Flock {
   };
 
   /**
-   * @method align()
+   * @method calculerAlignement()
    * @param {Array} agents 
    * part of flocking system
    */
-  align(agents) {
+  calculerAlignement(agents) {
     let neighbordist = 50;
     let sum = new Vector(0, 0);
     let count = 0;
@@ -138,11 +138,11 @@ class Flock {
 
 
   /**
-   * @method cohesion()
+   * @method calculerCohesion()
    * @param {Array} agents 
    * part of flocking system
    */
-  cohesion(agents) {
+  calculerCohesion(agents) {
     let neighbordist = 30;
     let sum = new Vector(0, 0);
     let count = 0;
