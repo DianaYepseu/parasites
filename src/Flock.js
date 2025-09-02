@@ -88,11 +88,11 @@ class Flock {
   }
 
   /**
-   * @method separate()
+   * @method calculerSeparation()
    * @param {Array} agents 
    * part of flocking system
    */
-  separate(agents) {
+  calculerSeparation(agents) {
     let desiredseperation = this.currentAgent.radius * 4;
     let sum = new Vector();
     let count = 0;
