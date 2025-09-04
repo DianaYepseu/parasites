@@ -119,22 +119,48 @@ class Flock {
    * part of flocking system
    */
   calculerAlignement(agents) {
+    // Distance de voisinage considérée (rayon de perception des voisins)
     let neighbordist = 50;
+
+    // Vecteur somme qui servira à accumuler les vitesses des voisins
     let sum = new Vector(0, 0);
+
+    // Compteur du nombre de voisins pris en compte
     let count = 0;
+
+    // Boucle sur tous les agents du système
     for (let i = 0; i < agents.length; i++) {
+
+      // Calcul de la distance au carré entre l'agent courant et un autre agent
+      // On utilise distSq (distance au carré) pour éviter la racine carrée, plus coûteuse en calcul
       let d = Vector.distSq(this.currentAgent.pos, agents[i].pos);
+
+      // Vérifie que l'agent comparé n'est pas soi-même (d > 0)
+      // et qu'il se situe à l'intérieur du rayon de voisinage (d < neighbordist²)
       if ((d > 0) && (d < neighbordist * neighbordist)) {
+
+        // Ajoute la vélocité (direction + vitesse) du voisin à la somme
         sum.add(agents[i].vel);
+
+        // Incrémente le nombre de voisins trouvés
         count++;
       }
     }
+
+    // Si au moins un voisin a été trouvé
     if (count > 0) {
+      // On calcule la vitesse moyenne des voisins en divisant la somme par leur nombre
       sum.div(count);
+
+      // On retourne un vecteur de "steering" (ajustement de direction)
+      // pour que l'agent tende à s'aligner avec la vitesse moyenne de ses voisins
       return this._returnSteer(sum);
     }
+
+    // Si aucun voisin n'a été trouvé, pas de force d'alignement → retour d'un vecteur nul
     return new Vector(0, 0);
-  }
+}
+
 
 
   /**
@@ -143,7 +169,7 @@ class Flock {
    * part of flocking system
    */
   calculerCohesion(agents) {
-    // distance maximale pour considérer un voisin (rayon d'influence)
+    // distance maximale pour considérer un voisin
     let neighbordist = 30;
 
     // vecteur qui va accumuler les positions des voisins
