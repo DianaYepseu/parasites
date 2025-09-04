@@ -95,7 +95,7 @@ class Flock {
  calculerSeparation(agents) {
     // Distance minimale désirée entre l'agent courant et ses voisins
     // Ici fixée à 4 fois le rayon de l'agent
-    let desiredseperation = this.currentAgent.radius * 4;
+    let desiredseperation = 30;
 
     // Vecteur qui va accumuler les directions de "fuite" par rapport aux voisins trop proches
     let sum = new Vector();
