@@ -92,26 +92,60 @@ class Flock {
    * @param {Array} agents 
    * part of flocking system
    */
-  calculerSeparation(agents) {
+ calculerSeparation(agents) {
+    // Distance minimale désirée entre l'agent courant et ses voisins
+    // Ici fixée à 4 fois le rayon de l'agent
     let desiredseperation = this.currentAgent.radius * 4;
+
+    // Vecteur qui va accumuler les directions de "fuite" par rapport aux voisins trop proches
     let sum = new Vector();
+
+    // Compteur des voisins considérés
     let count = 0;
+
+    // Parcourt tous les agents
     for (let i = 0; i < agents.length; i++) {
+
+      // Distance au carré entre l'agent courant et un autre agent
       let d = Vector.distSq(this.currentAgent.pos, agents[i].pos);
+
+      // Vérifie que l'agent comparé n'est pas soi-même (d > 0)
+      // et qu'il est plus proche que la distance de séparation souhaitée
       if ((d > 0) && (d < desiredseperation * desiredseperation)) {
+
+        // Crée un vecteur de direction allant de l'autre agent vers l'agent courant
+        // (c'est la direction dans laquelle on veut s'éloigner)
         let diff = Vector.sub(this.currentAgent.pos, agents[i].pos);
+
+        // Normalise le vecteur (longueur = 1) pour garder seulement la direction
         diff.normalize();
+
+        // Pondère par l'inverse de la distance au carré →
+        // plus l'agent est proche, plus la force de répulsion est forte
         diff.div(d);
+
+        // Ajoute cette contribution à la somme totale
         sum.add(diff);
+
+        // Incrémente le compteur de voisins considérés
         count++;
       }
     }
+
+    // Si au moins un voisin trop proche a été trouvé
     if (count > 0) {
+      // Moyenne des vecteurs de répulsion calculés
       sum.div(count);
+
+      // Retourne un vecteur de "steering" pour corriger la trajectoire
+      // afin que l'agent s’éloigne des voisins trop proches
       return this._returnSteer(sum);
     }
+
+    // Si aucun voisin proche, pas besoin de séparation → vecteur nul
     return new Vector(0, 0);
-  };
+};
+
 
   /**
    * @method calculerAlignement()
